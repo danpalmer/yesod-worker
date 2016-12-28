@@ -12,3 +12,6 @@ data Workers = Workers
 
 class Yesod master => YesodWorker master where
   workers :: master -> Workers
+
+  workerConcurrency :: master -> Int
+  workerConcurrency _ = 10

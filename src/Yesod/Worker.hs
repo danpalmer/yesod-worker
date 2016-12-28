@@ -34,7 +34,8 @@ newWorkers = Workers <$> newEmptyMVar <*> connect defaultConnectInfo
 
 bootWorkers :: YesodWorker master => Configurator (HandlerT master IO) -> HandlerT master IO ()
 bootWorkers declareJobs = void $ do
-  Workers{..} <- workers <$> getYesod
+  site <- getYesod
+  let Workers{..} = workers site
 
   -- TODO: need to ensure we have enough connections in the pool to cover
   -- - concurrency many workers
@@ -43,7 +44,7 @@ bootWorkers declareJobs = void $ do
   -- - however many connections the client might need
   conn <- liftIO $ connect (defaultConnectInfo { connectMaxConnections = 100 })
   conf <- mkConf conn $ do
-    concurrency 10
+    concurrency (workerConcurrency site)
     middleware record
     middleware retry
     declareJobs
