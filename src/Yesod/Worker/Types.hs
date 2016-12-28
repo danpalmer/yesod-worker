@@ -17,3 +17,5 @@ class Yesod master => YesodWorker master where
   workerLayout :: WidgetT master IO () -> HandlerT master IO Html
   workerLayout = defaultLayout
 
+  workerConcurrency :: master -> Int
+  workerConcurrency _ = 10
