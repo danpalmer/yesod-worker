@@ -31,8 +31,8 @@ import Database.Redis
 instance YesodWorker master => YesodSubDispatch Workers (HandlerT master IO) where
   yesodSubDispatch = $(mkYesodSubDispatch resourcesWorkers)
 
-newWorkers :: (YesodWorker master) => master -> IO Workers
-newWorkers m = Workers <$> newEmptyMVar <*> connect (redisConfig m)
+newWorkers :: ConnectInfo -> IO Workers
+newWorkers c = Workers <$> newEmptyMVar <*> connect c
 
 
 bootManagers :: YesodWorker master => Configurator (HandlerT master IO) -> HandlerT master IO ()
