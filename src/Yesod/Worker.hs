@@ -37,7 +37,9 @@ newWorkers c = Workers <$> newEmptyMVar <*> connect c
 
 bootManagers :: YesodWorker master => Configurator (HandlerT master IO) -> HandlerT master IO ()
 bootManagers declareJobs = void $ do
-  Workers{..} <- workers <$> getYesod
+  master <- getYesod
+
+  let Workers{..} = workers master
 
   -- TODO: need to ensure we have enough connections in the pool to cover
   -- - however many connections the client might need
