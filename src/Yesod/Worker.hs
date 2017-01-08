@@ -41,7 +41,7 @@ bootManagers declareJobs = void $ do
 
   -- TODO: need to ensure we have enough connections in the pool to cover
   -- - however many connections the client might need
-  conn <- liftIO $ connect (defaultConnectInfo { connectMaxConnections = 100 })
+  conn <- liftIO $ connect ((redisConfig master) { connectMaxConnections = 100 })
   conf <- mkConf conn $ do
     concurrency 10
     middleware record
