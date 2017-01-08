@@ -43,10 +43,7 @@ bootManagers declareJobs = void $ do
 
   -- TODO: need to ensure we have enough connections in the pool to cover
   -- - however many connections the client might need
-  let redisConf = ((redisConfig master) { connectMaxConnections = 100 })
-  liftIO $ putStrLn "Redis Config:"
-  liftIO $ putStrLn $ show redisConf
-  conn <- liftIO $ connect redisConf
+  conn <- liftIO $ connect ((redisConfig master) { connectMaxConnections = 100 })
   conf <- mkConf conn $ do
     concurrency 10
     middleware record
